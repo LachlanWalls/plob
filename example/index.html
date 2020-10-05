@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>test</title>
+    <script src='../src/plob.js'></script>
+
+    <script>
+    
+    plob.start({ containers: '#container', load_overlay: '#loader', logging: true, loadtimes: true })
+    
+    </script>
+
 </head>
 <body>
+
     <h1>test</h1>
     <a href='/example/test'>test</a>
     <div id="loader">loading...</div>
     <div id="container"></div>
-    <script src='../src/plob.js'></script>
+    
     <script>
     
     plob.pages.push({name: '404 page', regex: '.*', loader: el => el.innerText = 'page not found', priority: -1})
     plob.pages.push({name: 'test', regex: '^\/example\/test.*$', loader: el => el.innerHTML = 'hello this is test page!<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwallup.net%2Fwp-content%2Fuploads%2F2016%2F01%2F22764-animals-cat-Grumpy_Cat.jpg&f=1&nofb=1" width="200">'})
-
-    plob.start({ containers: '#container', load_overlay: '#loader', logging: true, loadtimes: true })
     
     </script>
+    
 </body>
 </html>
