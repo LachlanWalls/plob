@@ -90,7 +90,13 @@ const plob = {
             if (!plob._validate(href.replace(location.origin, ''))) return
     
             a_elm.addEventListener('click', e => {
+
                 e.preventDefault()
+                
+                if (e.metaKey) {
+                    window.open(a_elm.href, '_blank')
+                    return
+                }
     
                 let nhref = a_elm.href.replace(location.origin, '')
                 if (!plob._validate(nhref)) {
