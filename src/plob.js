@@ -2,7 +2,7 @@
 
     window.plob = {
         _sethref: url => history.pushState({}, document.title, url),
-        _state: { cci: -1, lof: null, ready: false },
+        _state: { cci: -1, lof: null, ready: false, starting: false },
         _validate: url => url.startsWith(plob.options.root),
         _clean: url => {
             while (!plob.options.trailing_slash && url.endsWith('/')) url = url.substring(0, url.length - 1)
@@ -16,6 +16,13 @@
         pages: [],
         options: {},
         start: options => {
+            document.addEventListener('readystatechange', () => plob._start(options))
+            plob._start(options)
+        },
+        _start: options => {
+
+            if (document.readyState === 'loading' || plob._state.starting) return
+            plob._state.starting = true
     
             const default_options = {
                 root: '/',
@@ -120,6 +127,8 @@
             plob._state.ready = true
 
             plob.load()
+
+            return true
         },
         load: async() => {
             if (!plob._validate(location.pathname)) return plob._oor()
