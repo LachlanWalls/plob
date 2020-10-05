@@ -69,6 +69,18 @@ plob.pages.push({regex: '.*', loader: my_page})
 
 The `page` object can also have a `name` and an `id` parameter, which serve no functional value within plob besides logging. A `priority` number (which defaults to `1`) can also be included, which will be used to sort the importance of pages when multiple regexs match for the current page. This is useful for pages such as 404.
 
+### Page Object
+
+key | type | example | description
+--- | ---- | ------- | -----------
+id | \*? | 'abcd123' | page ID. Not required for any plob functionality
+name | \*? | 'abcd123' | page name. Not required for any plob functionality
+regex | RegExp | '\/mypage.*' | regular expression to match the URLs this page applies to
+loader | Function | - | function to run in order to load the page into a given element
+priority | Number | 10 | relative priority compared to other pages
+
+**Note: it is highly recommended to use an Asynchronous Function for the loader if the page relies on asynchrous code, otherwise it may appear before it has fully loaded.**
+
 ## 404 Page
 
 A 404 page can easily be added with a wildcard regex and a negative priority, like so:
