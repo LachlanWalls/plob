@@ -1,6 +1,6 @@
 (() => {
 
-    window.plob = {
+    const plob = {
         _sethref: url => history.pushState({}, document.title, url),
         _state: { cci: -1, lof: null, ready: false, starting: false },
         _validate: url => url.startsWith(plob.options.root),
@@ -20,7 +20,7 @@
             plob._start(options)
         },
         _start: options => {
-
+    
             if (document.readyState === 'loading' || plob._state.starting) return
             plob._state.starting = true
     
@@ -35,7 +35,7 @@
             }
         
             plob.options = Object.assign(default_options, options)
-
+    
         
             // option parsing
             while (plob.options.root.endsWith('/')) plob.options.root = plob.options.root.substring(0, plob.options.root.length - 1)
@@ -62,7 +62,7 @@
                 plob.options.containers.push(document.body)
                 plob.log('warning', 'no containers specified, using document.body. It is highly recommended you explicitly set this value.', '#f9960c')
             }
-
+    
             // load overlay checking
             if (typeof(plob.options.load_overlay) === 'string') {
                 try {
@@ -105,7 +105,7 @@
                     return false
                 })
             })
-
+    
             // listeners
             window.addEventListener('popstate', () => {
                 if (plob._state.ready) {
@@ -114,7 +114,7 @@
                     plob.go(url)
                 }
             })
-
+    
             // startup logging
             if (plob.options.logging) {
                 plob.log('started', plob.options, '#07ffd9')
@@ -123,42 +123,42 @@
                 window.addEventListener('plob:page_load_start', e => plob.log('page_load_start', strpgld(e.detail), '#0cf914'))
                 window.addEventListener('plob:page_load_complete', e => plob.log('page_load_complete', strpgld(e.detail), '#039b08'))
             }
-
+    
             plob._state.ready = true
-
+    
             plob.load()
-
+    
             return true
         },
         load: async() => {
             if (!plob._validate(location.pathname)) return plob._oor()
             const cur_url = plob._clean(location.pathname)
             if (location.pathname !== cur_url) plob._sethref(cur_url)
-
+    
             const pages = plob.pages.sort((a, b) => (b.priority || 1) - (a.priority || 1))
             const page = pages.find(pg => cur_url.match(pg.regex))
             if (!page) return console.error('plob: no page found')
-
+    
             let pd = {}
             if (page.name) pd.name = page.name
             if (page.id) pd.id = page.id
             if (!page.name && !page.id) pd.regex = page.regex
-
+    
             window.dispatchEvent(new CustomEvent('plob:page_load_start', { detail: pd }))
-
+    
             let ncci = plob._state.cci + 1
             if (ncci > plob.options.containers.length - 1) ncci = 0
             const container = plob.options.containers[ncci]
-
+    
             const ploads = performance.now()
             const res = await page.loader(container, plob.options)
             const lt = Math.round((performance.now() - ploads) * 1000) / 1000
-
+    
             plob.options.containers.forEach(cont => cont.style.display = (cont === container) ? '':'none')
             plob._state.cci = ncci
-
+    
             if (plob.options.load_overlay instanceof Node) plob.options.load_overlay.style.display = 'none'
-
+    
             if (plob.options.loadtimes) pd.time = lt
             window.dispatchEvent(new CustomEvent('plob:page_load_complete', { detail: pd }))
         },
@@ -168,5 +168,11 @@
             plob.load()
         }
     }
+    
+    if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+        module.exports = plob
+    } else {
+        window.plob = plob
+    }
 
-})()
+})
