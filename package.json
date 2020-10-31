@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LachlanWalls/plob.git"
+    "url": "git+https://github.com/eeehh/plob.git"
   },
   "keywords": [],
   "author": "eeehh <eeehhdev@gmail.com>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/LachlanWalls/plob/issues"
+    "url": "https://github.com/eeehh/plob/issues"
   },
-  "homepage": "https://github.com/LachlanWalls/plob#readme",
+  "homepage": "https://github.com/eeehh/plob#readme",
   "dependencies": {},
   "devDependencies": {}
 }
