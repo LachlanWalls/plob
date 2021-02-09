@@ -83,32 +83,7 @@ const plob = {
         if (location.pathname !== cur_url) plob._sethref(cur_url)
     
         // override links
-        document.querySelectorAll('a:not(.plob-ignore):not([plob-ignore])').forEach(a_elm => {
-            let href = plob._clean(a_elm.href.replace(location.origin, ''))
-            a_elm.href = href
-    
-            if (!plob._validate(href.replace(location.origin, ''))) return
-    
-            a_elm.addEventListener('click', e => {
-
-                e.preventDefault()
-                
-                if (e.metaKey) {
-                    window.open(a_elm.href, '_blank')
-                    return
-                }
-    
-                let nhref = a_elm.href.replace(location.origin, '')
-                if (!plob._validate(nhref)) {
-                    console.error('plob: invalid link clicked.')
-                    return false
-                }
-    
-                plob.go(nhref, true)
-    
-                return false
-            })
-        })
+        plob._override()
 
         // listeners
         window.addEventListener('popstate', () => {
@@ -133,6 +108,36 @@ const plob = {
         plob.load()
 
         return true
+    },
+    _override: () => {
+        document.querySelectorAll('a:not(.plob-ignore):not([plob-ignore]):not(.plob-upgraded)').forEach(a_elm => {
+            let href = plob._clean(a_elm.href.replace(location.origin, ''))
+            a_elm.href = href
+    
+            if (!plob._validate(href.replace(location.origin, ''))) return
+    
+            a_elm.addEventListener('click', e => {
+
+                e.preventDefault()
+                
+                if (e.metaKey) {
+                    window.open(a_elm.href, '_blank')
+                    return
+                }
+    
+                let nhref = a_elm.href.replace(location.origin, '')
+                if (!plob._validate(nhref)) {
+                    console.error('plob: invalid link clicked.')
+                    return false
+                }
+    
+                plob.go(nhref, true)
+    
+                return false
+            })
+
+            a_elm.classList.add('plob-upgraded')
+        })
     },
     load: async() => {
         if (!plob._validate(location.pathname)) return plob._oor()

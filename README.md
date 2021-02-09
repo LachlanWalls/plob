@@ -32,6 +32,8 @@ This can be run at any time, but will wait for the DOM content to load before ac
 
 Any `a` tag with a path within the `root` path specifified in the options will automatically be overridden. Basically, you don't have to do anything.
 
+If you're adding a link *after* plob has started, run `plob._override()` to override links again. Links that are already upgraded won't be double-upgraded.
+
 ## Options
 
 The `plob.start(options)` function takes an object of options as input to configure plob's behaviour.
