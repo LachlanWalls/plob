@@ -165,7 +165,7 @@ const plob = {
         else container = plob.options.containers[ncci]
 
         if (!plob._allcontainers.includes(container)) plob._allcontainers.push(container)
-        container.innerHTML = ''
+        if (plob.containers.includes(container)) container.innerHTML = ''
 
         const ploads = performance.now()
         const res = await page.loader(container, plob.options)
