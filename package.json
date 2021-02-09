@@ -1,6 +1,6 @@
 {
   "name": "plob",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "SPA state manager",
   "main": "./src/plob",
   "scripts": {

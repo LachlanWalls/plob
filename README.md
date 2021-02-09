@@ -80,6 +80,7 @@ name | \*? | 'abcd123' | page name. Not required for any plob functionality
 regex | RegExp | '\/mypage.*' | regular expression to match the URLs this page applies to
 loader | Function | - | function to run in order to load the page into a given element
 priority | Number | 10 | relative priority compared to other pages
+container | Node or Selector | '#special_container' | a specific container to use for this page, will never be overridden by another page
 
 **Note: it is highly recommended to use an Asynchronous Function for the loader if the page relies on asynchrous code, otherwise it may appear before it has fully loaded.**
 

@@ -12,6 +12,7 @@ const plob = {
         console.log(`%c[plob:%c${name}%c]%c >>%c`, `color: #b35bf7`, `color: ${evtcol}`, `color: #b35bf7`, 'color: #636363', 'color: inherit', info)
     },
     pages: [],
+    _allcontainers: [],
     options: {},
     start: options => {
         document.addEventListener('readystatechange', () => plob._start(options))
@@ -155,16 +156,23 @@ const plob = {
 
         window.dispatchEvent(new CustomEvent('plob:page_load_start', { detail: pd }))
 
+        let container;
         let ncci = plob._state.cci + 1
         if (ncci > plob.options.containers.length - 1) ncci = 0
-        const container = plob.options.containers[ncci]
+
+        if (typeof page.container === 'string') page.container = document.querySelector(page.container)
+        if (page.container instanceof Node) container = page.container
+        else container = plob.options.containers[ncci]
+
+        if (!plob._allcontainers.includes(container)) plob._allcontainers.push(container)
+        container.innerHTML = ''
 
         const ploads = performance.now()
         const res = await page.loader(container, plob.options)
         const lt = Math.round((performance.now() - ploads) * 1000) / 1000
 
-        plob.options.containers.forEach(cont => cont.style.display = (cont === container) ? '':'none')
-        plob._state.cci = ncci
+        plob._allcontainers.forEach(cont => cont.style.display = (cont === container) ? '':'none')
+        if (!(page.container instanceof Node)) plob._state.cci = ncci
 
         if (plob.options.load_overlay instanceof Node) plob.options.load_overlay.style.display = 'none'
 
